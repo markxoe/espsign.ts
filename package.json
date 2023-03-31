@@ -3,6 +3,11 @@
   "version": "1.0.0",
   "main": "dist/index.js",
   "types": "dist/types.d.ts",
+  "author": "markxoe",
+  "license": "MIT",
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "tsc",
     "test": "jest"
