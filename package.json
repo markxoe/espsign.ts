@@ -2,7 +2,7 @@
   "name": "espsign",
   "version": "1.0.0",
   "main": "dist/index.js",
-  "types": "dist/types.d.ts",
+  "types": "dist/index.d.ts",
   "author": "markxoe",
   "license": "MIT",
   "files": [
