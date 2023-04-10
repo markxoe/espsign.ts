@@ -1,5 +1,5 @@
 import crypto from "crypto";
-import { make_sign_block } from "./sign";
+import { get_rsa_primitives, make_sign_block } from "./sign";
 
 const sector_size = 4096;
 
@@ -21,4 +21,13 @@ export const composeSignature = (imageContent: Buffer, keys: string[]) => {
   );
 
   return Buffer.from(outputImage);
+};
+
+export const getKeyDigest = (key: string) => {
+  const toHash = get_rsa_primitives(key).flat(1);
+  return crypto
+    .createHash("sha256")
+    .update(Buffer.from(toHash))
+    .digest()
+    .toString("hex");
 };

@@ -4,7 +4,7 @@ import fs from "fs";
 import path from "path";
 import crypto from "crypto";
 import childProcess from "child_process";
-import { composeSignature } from "../src";
+import { composeSignature, getKeyDigest } from "../src";
 
 const tmp = path.join(__dirname, "tmp");
 const firmware = path.join(__dirname, "firmware.bin");
@@ -22,6 +22,10 @@ const invokeESPSecureVerify = (keys: number[]) => {
         .join(" ")}`
     )
     .toString();
+};
+
+const invokeESPSecure = (args: string) => {
+  return childProcess.execSync(`espsecure.py ${args}`).toString();
 };
 
 describe("V2 RSA", () => {
@@ -65,4 +69,15 @@ Signature block ${keyN} verification successful using the supplied key (RSA).`
     test(`${key} key${key != 1 ? "s" : ""}`, () => {
       runForXKeys(key);
     });
+
+  test("Keydigest", () => {
+    invokeESPSecure(
+      `digest_sbv2_public_key -k ${keyFileName(0)} -o ${keyFileName(0)}.digest`
+    );
+    const espsecureDigest = fs
+      .readFileSync(`${keyFileName(0)}.digest`)
+      .toString("hex");
+
+    expect(getKeyDigest(keys[0])).toEqual(espsecureDigest);
+  });
 });

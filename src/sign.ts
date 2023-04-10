@@ -46,7 +46,7 @@ export const construct_sign_block = (
   return output;
 };
 
-export const make_sign_block = (pem: string, hash: Vn, data: Vn) => {
+export const get_rsa_primitives = (pem: string): [Vn, Vn, Vn, Vn] => {
   const key = forge.pki.privateKeyFromPem(pem);
 
   const rsa_n = key.n
@@ -68,6 +68,15 @@ export const make_sign_block = (pem: string, hash: Vn, data: Vn) => {
     .reverse()
     .map((i) => (i + 0x100) % 0x100);
 
+  return [
+    doStuffToMakeTarget(rsa_n, 384),
+    doStuffToMakeTarget(rsa_e, 4),
+    doStuffToMakeTarget(rsa_r, 384),
+    doStuffToMakeTarget(rsa_m, 4),
+  ];
+};
+
+export const make_sign_block = (pem: string, hash: Vn, data: Vn) => {
   const sig = crypto
     .sign("RSA-SHA256", Buffer.from(data), {
       key: crypto.createPrivateKey(pem),
@@ -78,10 +87,7 @@ export const make_sign_block = (pem: string, hash: Vn, data: Vn) => {
 
   return construct_sign_block(
     hash,
-    doStuffToMakeTarget(rsa_n, 384),
-    doStuffToMakeTarget(rsa_e, 4),
-    doStuffToMakeTarget(rsa_r, 384),
-    doStuffToMakeTarget(rsa_m, 4),
+    ...get_rsa_primitives(pem),
     Array.from(sig)
   );
 };
