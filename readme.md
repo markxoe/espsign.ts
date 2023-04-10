@@ -21,3 +21,13 @@ const output = espsign.composeSignature(fs.readFileSync("firmware.bin"), [
 
 fs.writeFileSync("out.bin", output);
 ```
+
+espsecure command: `espsecure.py digest_sbv2_public_key -k key1.pem -o out.bin`
+
+```ts
+import espsign from "espsign";
+
+const output = espsign.getKeyDigest(fs.readFileSync("key1.pem").toString());
+
+fs.writeFileSync("out.bin", Buffer.from(output, "hex"));
+```
