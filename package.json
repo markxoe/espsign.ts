@@ -29,5 +29,9 @@
     "espsecure",
     "esptool",
     "ota"
-  ]
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/markxoe/espsign.ts"
+  }
 }
