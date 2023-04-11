@@ -31,3 +31,5 @@ export const getKeyDigest = (key: string) => {
     .digest()
     .toString("hex");
 };
+
+export { encryptAESXTS } from "./encrypt";
